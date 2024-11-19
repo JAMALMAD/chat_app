@@ -1,12 +1,10 @@
+import 'package:cheating_app/view/screen/profile_Screen.dart';
+import 'package:cheating_app/view/screen/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_chat/controller/user_controller.dart';
-import 'package:my_chat/model/user_model.dart';
-import 'package:my_chat/view/profile_screen.dart';
-import 'package:my_chat/widgets/user_card.dart';
-
 import '../../model/user_model.dart';
+import 'auth/controller/user_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    UserController.selfInfo();
     SystemChannels.lifecycle.setMessageHandler((message) {
       if (UserController.firebaseAuth.currentUser != null) {
         if (message.toString().contains("resume"))
@@ -63,30 +60,30 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             title: isSearching
                 ? Container(
-              height: 40.h,
-              child: TextFormField(
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 5.w),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15))),
-                onChanged: (searchValue) {
-                  _searchingList.clear();
-                  for (var i in dataList) {
-                    if (i.name
-                        .toLowerCase()
-                        .contains(searchValue.toLowerCase()) ||
-                        i.email
-                            .toLowerCase()
-                            .contains(searchValue.toLowerCase())) {
-                      _searchingList.add(i);
-                    }
-                    setState(() {
-                      _searchingList;
-                    });
-                  }
-                },
-              ),
-            )
+                    height: 40.h,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 5.w),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15))),
+                      onChanged: (searchValue) {
+                        _searchingList.clear();
+                        for (var i in dataList) {
+                          if (i.name
+                                  .toLowerCase()
+                                  .contains(searchValue.toLowerCase()) ||
+                              i.email
+                                  .toLowerCase()
+                                  .contains(searchValue.toLowerCase())) {
+                            _searchingList.add(i);
+                          }
+                          setState(() {
+                            _searchingList;
+                          });
+                        }
+                      },
+                    ),
+                  )
                 : Text("Chat App"),
             leading: IconButton(onPressed: () {}, icon: Icon(Icons.home)),
             actions: [
@@ -99,11 +96,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: isSearching ? Icon(Icons.clear) : Icon(Icons.search)),
               IconButton(
                   onPressed: () {
-                    Navigator.push(
+                    if (UserController.me != null) {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) =>
-                                Profile_screen(myUser: UserController.me)));
+                          builder: (_) =>
+                              Profile_screen(myUser: UserController.me),
+                        ),
+                      );
+                    } else {
+                      // Handle the case where `me` is null (maybe show a loading indicator)
+                      print('User data is not initialized yet');
+                    }
                   },
                   icon: Icon(Icons.more_vert)),
             ],
@@ -113,45 +117,90 @@ class _HomeScreenState extends State<HomeScreen> {
             child: RefreshIndicator(
               onRefresh: _refresh,
               child: StreamBuilder(
-                stream: UserController.getAllUser(),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                      return Container();
-                    case ConnectionState.active:
-                    case ConnectionState.done:
-                      final data = snapshot.data!.docs;
-                      dataList = data
-                          .map((e) => DataModel.fromJson(e.data()))
-                          .toList();
+                // stream: UserController.getAllUser(),
+                // builder: (context, snapshot) {
+                //   switch (snapshot.connectionState) {
+                //     case ConnectionState.waiting:
+                //     case ConnectionState.none:
+                //       return Container();
+                //     case ConnectionState.active:
+                //     case ConnectionState.done:
+                //       final data = snapshot.data!.docs;
+                //       dataList = data
+                //           .map((e) => DataModel.fromJson(e.data()))
+                //           .toList();
 
-                      if (dataList.isNotEmpty) {
-                        return ListView.builder(
-                            itemCount: isSearching
-                                ? _searchingList.length
-                                : dataList.length,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return isSearching
-                                  ? MyUserCard(
-                                myUser: _searchingList[index],
-                              )
-                                  : MyUserCard(
-                                myUser: dataList[index],
-                              );
-                            });
-                      } else {
-                        return Center(
-                          child: Text(
-                            "No Data Found!",
-                            style: TextStyle(
-                                fontSize: 25.sp, color: Colors.red.shade300),
-                          ),
-                        );
-                      }
-                  }
-                },
+                //       if (dataList.isNotEmpty) {
+                //         return ListView.builder(
+                //             itemCount: isSearching
+                //                 ? _searchingList.length
+                //                 : dataList.length,
+                //             physics: BouncingScrollPhysics(),
+                //             itemBuilder: (context, index) {
+                //               return isSearching
+                //                   ? MyUserCard(
+                //                       myUser: _searchingList[index],
+                //                     )
+                //                   : MyUserCard(
+                //                       myUser: dataList[index],
+                //                     );
+                //             });
+                //       } else {
+                //         return Center(
+                //           child: Text(
+                //             "No Data Found!",
+                //             style: TextStyle(
+                //                 fontSize: 25.sp, color: Colors.red.shade300),
+                //           ),
+                //         );
+                //       }
+                //   }
+                // },
+                
+                 stream: UserController.getAllUser(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator());
+    } else if (snapshot.connectionState == ConnectionState.none ||
+        snapshot.data == null) {
+      return Center(
+        child: Text("No data available", style: TextStyle(fontSize: 20.sp)),
+      );
+    } else if (snapshot.connectionState == ConnectionState.done ||
+        snapshot.connectionState == ConnectionState.active) {
+      // Ensure snapshot.data is not null here
+      final data = snapshot.data!.docs;
+
+      // Convert Firestore data to your model list
+      dataList = data
+          .map((e) => DataModel.fromJson(e.data()))
+          .toList();
+
+      if (dataList.isNotEmpty) {
+        return ListView.builder(
+          itemCount: isSearching ? _searchingList.length : dataList.length,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return isSearching
+                ? MyUserCard(myUser: _searchingList[index])
+                : MyUserCard(myUser: dataList[index]);
+          },
+        );
+      } else {
+        return Center(
+          child: Text(
+            "No Data Found!",
+            style: TextStyle(fontSize: 25.sp, color: Colors.red.shade300),
+          ),
+        );
+      }
+    } else {
+      // Handle other connection states
+      return Center(
+        child: Text("Something went wrong", style: TextStyle(fontSize: 20.sp)),
+      );
+    }
+  },
               ),
             ),
           ),

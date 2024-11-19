@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../../../../model/user_model.dart';
 
 class AuthController extends GetxController {
-  
+
   //==========================================================signin
   Rx<TextEditingController> emailController = TextEditingController().obs;
   Rx<TextEditingController> passwordController = TextEditingController().obs;
@@ -48,12 +48,14 @@ try {
   if (credential.user != null) {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
     final myUser = DataModel(
+      // image: curentUser.photoURL.toString(),
         name: nameController.value.text,
         createdAt: time,
         lastActive: time,
         isOnline: false,
         id: credential.user!.uid,
         pushToken: "",
+      
         email: signUPEmail.value.text);
     return await firebaseFirestore
         .collection("Users")
@@ -62,7 +64,7 @@ try {
           print("=============================================topu");
         });
   }else{
-    
+
           print("=============================================jamal");
   }
 } on FirebaseAuthException catch (e) {

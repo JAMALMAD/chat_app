@@ -15,7 +15,7 @@ class DataModel {
   late String id;
   late String pushToken;
   late String email;
-  
+
   DataModel.fromJson(Map<String, dynamic> json){
     name = json['name'] ?? "";
     createdAt = json['created_at'] ?? "";

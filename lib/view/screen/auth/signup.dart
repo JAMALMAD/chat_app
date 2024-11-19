@@ -159,7 +159,7 @@ class SignUpScreen extends StatelessWidget {
                   authController.signUP();
                     print(
                         "===============================user creat successfull");
-                        Get.to(LoginScreen());
+                        Get.to(HomeScreen());
                   }
                 },
                 title: "SignUP",
@@ -181,7 +181,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.offAllNamed(HomeScreen());
+                      // Get.offAllNamed("/homeScreen");
                     },
                     child: const CustomText(
                       color: Colors.blue,

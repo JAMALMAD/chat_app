@@ -1,13 +1,16 @@
 import 'package:cheating_app/core/app_route.dart';
 import 'package:cheating_app/core/dependency.dart';
 import 'package:cheating_app/firebase_options.dart';
+import 'package:cheating_app/view/screen/auth/controller/user_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   DependencyInjection di = DependencyInjection();
   di.dependencies();
