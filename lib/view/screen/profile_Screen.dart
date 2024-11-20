@@ -8,15 +8,15 @@ import 'package:image_picker/image_picker.dart';
 import '../../model/user_model.dart';
 import 'auth/controller/user_controller.dart';
 
-class Profile_screen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   final DataModel myUser;
-  const Profile_screen({super.key, required this.myUser});
+  const ProfileScreen({super.key, required this.myUser});
 
   @override
-  State<Profile_screen> createState() => _Profile_screenState();
+  State<ProfileScreen> createState() => _Profile_screenState();
 }
 
-class _Profile_screenState extends State<Profile_screen> {
+class _Profile_screenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
   String? _image;
 
@@ -284,3 +284,36 @@ class _Profile_screenState extends State<Profile_screen> {
         });
   }
 }
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+//
+// import '../../model/user_model.dart';
+//
+// class ProfileScreen extends StatefulWidget {
+//   final DataModel myUser;
+//   const ProfileScreen({super.key,required this.myUser});
+//
+//
+//   @override
+//   State<ProfileScreen> createState() => _ProfileScreenState();
+// }
+//
+// class _ProfileScreenState extends State<ProfileScreen> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         leading: const Icon(CupertinoIcons.home),
+//         title: const Text("Profile Screen"),
+//         actions: [
+//           IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+//           IconButton(onPressed: (){}, icon: Icon(Icons.more_vert))
+//         ],
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: ()async{
+//         },
+//       ),
+//     );
+//   }
+// }

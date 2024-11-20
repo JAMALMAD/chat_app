@@ -61,7 +61,7 @@ try {
         .collection("Users")
         .doc(credential.user!.uid)
         .set(myUser.toJson()).then((value){
-          print("=============================================topu");
+          print("=============================================She");
         });
   }else{
 
