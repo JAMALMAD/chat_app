@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
           ),
           debugShowCheckedModeBanner: false,
-          initialRoute: AppRoute.signUpScreen,
+          initialRoute: AppRoute.loginScreen,
           getPages: AppRoute.routes,
         );
       },

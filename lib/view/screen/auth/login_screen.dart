@@ -9,10 +9,10 @@ import '../widgets/custom_text.dart';
 import '../widgets/custom_textfield.dart';
 import 'controller/auth_controller.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  final formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState>  formKey = GlobalKey<FormState>();
 
   final AuthController authController = Get.find<AuthController>();
 
@@ -63,33 +63,8 @@ class SignUpScreen extends StatelessWidget {
                       ],
                     ),
 
-                    ///<===================================Name section============================>
-                    SizedBox(
-                      height: 31.h,
-                    ),
 
-                    CustomText(
-                      text: AppString.fullName,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      bottom: 8.h,
-                    ),
-
-                    CustomTextField(
-                      textEditingController:
-                          authController.nameController.value,
-                      validator: (value) {
-                        if (value == null || value.toString().isEmpty) {
-                          return AppString.fieldCantBeEmpty;
-                        } else if (value.length < 4) {
-                          return AppString.enterAValidName;
-                        }
-                        return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      hintText: AppString.fullName,
-                    ),
-
+                 
                     ///<===========================Email section======================================>
 
                     CustomText(
@@ -100,16 +75,16 @@ class SignUpScreen extends StatelessWidget {
                       top: 8.h,
                     ),
                     CustomTextField(
-                      textEditingController: authController.signUPEmail.value,
+                      textEditingController: authController.emailController.value,
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return AppString.enterValidEmail;
-                        } else if (!AppString.emailRegexp
-                            .hasMatch(authController.signUPEmail.value.text)) {
-                          return AppString.enterValidEmail;
-                        } else {
-                          return null;
-                        }
+                        // if (value!.isEmpty) {
+                        //   return AppString.enterValidEmail;
+                        // } else if (!AppString.emailRegexp
+                        //     .hasMatch(authController.signUPEmail.value.text)) {
+                        //   return AppString.enterValidEmail;
+                        // } else {
+                        //   return null;
+                        // }
                       },
 
                       textInputAction: TextInputAction.next,
@@ -127,16 +102,16 @@ class SignUpScreen extends StatelessWidget {
                     ),
 
                     CustomTextField(
-                      textEditingController: authController.signUPPass.value,
+                      textEditingController: authController.passwordController.value,
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return AppString.passWordMustBeAtLeast;
-                        } else if (value.length < 8 ||
-                            !AppString.passRegexp.hasMatch(value)) {
-                          return "Password must be at least 8 characters long";
-                        } else {
-                          return null;
-                        }
+                        // if (value.isEmpty) {
+                        //   return AppString.passWordMustBeAtLeast;
+                        // } else if (value.length < 8 ||
+                        //     !AppString.passRegexp.hasMatch(value)) {
+                        //   return "Password must be at least 8 characters long";
+                        // } else {
+                        //   return null;
+                        // }
                       },
                       textInputAction: TextInputAction.next,
                       //textEditingController: controller.passSignUp,
@@ -151,20 +126,23 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
 
-              ///<==============================================Sign Up Button==========================================>
-              CustomButton(
-                fillColor: Colors.blue,
-                onTap: () {
-                  if (formKey.currentState!.validate()) {
+              ///<==============================================login  Button==========================================>
+              ElevatedButton(onPressed: (){authController.loginMethod();}, child: Text("Login")),
+              
+              // CustomButton(
+              //   fillColor: Colors.blue,
+              //   onTap: () {
+              //      authController.loginMethod();
+              //     if (formKey.currentState!.validate()) {
                     
-                  authController.signUPMethod();
-                    print(
-                        "===============================user creat successfull");
-                        Get.to(HomeScreen());
-                  }
-                },
-                title: "SignUP",
-              ),
+                 
+              //       print(
+              //           "===============================user creat successfull");
+                 
+              //     }
+              //   },
+              //   title: "Login",
+              // ),
 
               SizedBox(
                 height: 32.h,
@@ -173,7 +151,7 @@ class SignUpScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const CustomText(
-                    text: "Already have an Account",
+                    text: "dont have an Account",
 
                     /// <==============================Sign in text==============================>
                   ),
@@ -182,11 +160,11 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoute.loginScreen);
+                      Get.offAllNamed(AppRoute.signUpScreen);
                     },
                     child: const CustomText(
                       color: Colors.blue,
-                      text: "LogIn",
+                      text: "sign UP",
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),

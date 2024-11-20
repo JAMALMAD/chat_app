@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,60 +36,15 @@ class _Profile_screenState extends State<ProfileScreen> {
               color: Colors.grey.withAlpha(50),
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      _image != null
-                          ? ClipRRect(
-                          borderRadius:
-                          BorderRadius.circular(mq.height * .1),
-                          child: Image.file(
-                            height: mq.height * .2,
-                            width: mq.height * .2,
-                            File(_image!),
-                            fit: BoxFit.fill,
-                          ))
-                          : ClipRRect(
-                        borderRadius:
-                        BorderRadius.circular(mq.height * .1),
-                        // child: CachedNetworkImage(
-                        //   height: mq.height * .2,
-                        //   width: mq.height * .2,
-                        //   imageUrl: widget.myUser.image,
-                        //   fit: BoxFit.fill,
-                        //   placeholder: (context, url) =>
-                        //       Center(child: CircularProgressIndicator()),
-                        //   errorWidget: (context, url, error) =>
-                        //       Icon(Icons.error),
-                        // ),
-                      ),
-                      Positioned(
-                          bottom: 0.h,
-                          right: 0.w,
-                          child: InkWell(
-                            onTap: () => _showModalSheet(),
-                            child: Container(
-                              padding: EdgeInsets.all(mq.width * .03),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.blue,
-                                border: Border.all(
-                                    color: Colors.white, width: mq.width * .01),
-                              ),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.blue),
+                    child: Center(child: Icon(Icons.person,color: Colors.white,size: 35,),),
                   ),
                   Text(widget.myUser.name,
                       style: TextStyle(fontSize: 20.sp, color: Colors.black)),
-                  // Text(widget.myUser.about,
-                  //     style: TextStyle(fontSize: 20.sp, color: Colors.black)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

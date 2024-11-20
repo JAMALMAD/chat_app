@@ -346,41 +346,31 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
       child: StreamBuilder(
-        stream: UserController.getAllMsg(widget.chatUser),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-            case ConnectionState.none:
-              return Center(child: SizedBox());
+  stream: UserController.getAllMsg(widget.chatUser),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.none) {
+      return Center(child: CircularProgressIndicator());
+    }
 
-            case ConnectionState.active:
-            case ConnectionState.done:
-              final data = snapshot.data?.docs;
-              msgList = data!.map((e) => MsgModel.fromJson(e.data())).toList();
+    if (snapshot.connectionState == ConnectionState.done || snapshot.connectionState == ConnectionState.active) {
+      final data = snapshot.data?.docs;
+      if (data == null || data.isEmpty) {
+        return Center(child: Text("No messages available"));
+      }
 
-              if (msgList.isNotEmpty) {
-                return ListView.builder(
-                    itemCount: msgList.length,
-                    reverse: true,
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return AllMessage(
-                        message: msgList[index],
-                        chatUser: widget.chatUser,
-                      );
-                    });
-              } else {
-                return Center(
-                  child: Text(
-                    "No Data Found!",
-                    style:
-                    TextStyle(fontSize: 20.sp, color: Colors.red.shade300),
-                  ),
-                );
-              }
-          }
+      msgList = data.map((e) => MsgModel.fromJson(e.data())).toList();
+      return ListView.builder(
+        itemCount: msgList.length,
+        reverse: true,
+        itemBuilder: (context, index) {
+          return AllMessage(message: msgList[index], chatUser: widget.chatUser);
         },
-      ),
+      );
+    }
+    return Center(child: Text("Unexpected error"));
+  },
+)
+
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:cheating_app/core/app_route.dart';
+import 'package:cheating_app/view/screen/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,8 +40,28 @@ try {
   }
 }
   }
+  //==================================================================login
+loginMethod()async{
+  try {
+  final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    email: emailController.value.text,
+    password: passwordController.value.text
+  );
+  if (credential.user != null) {
+    print("===============================login successfull");
+    // Get.toNamed(AppRoute.homeScreen);
+    Get.to(HomeScreen());
+  }
+} on FirebaseAuthException catch (e) {
+  if (e.code == 'user-not-found') {
+    print('No user found for that email.');
+  } else if (e.code == 'wrong-password') {
+    print('Wrong password provided for that user.');
+  }
+}
+}
   //=========================================================================sign up method
-  signUP()async{
+  signUPMethod()async{
     try {
   final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
     email: signUPEmail.value.text,

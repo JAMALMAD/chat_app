@@ -61,6 +61,34 @@ class UserController {
       }
     });
   }
+//   static Future<void> selfInfo() async {
+//   final user = firebaseAuth.currentUser;
+  
+//   if (user == null) {
+//     // Handle scenario where the user is not logged in
+//     print('User is not authenticated.');
+//     return;
+//   }
+
+//   await firebaseFirestore
+//       .collection("Users")
+//       .doc(user.uid)
+//       .get()
+//       .then((myUser) {
+//     if (myUser.exists) {
+//       me = DataModel.fromJson(myUser.data()!);
+//       getNotificationToken();
+//       userActiveStatus(true);
+//     } else {
+//       createUser().then((value) {
+//         selfInfo();
+//       });
+//     }
+//   }).catchError((e) {
+//     print('Error getting user data: $e');
+//   });
+// }
+
 
   // other users info===============================>
   static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
